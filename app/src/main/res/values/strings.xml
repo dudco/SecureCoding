@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SecureCoding</string>
+
+    <string name="pass_hint1">아버지 성함은?</string>
+    <string name="pass_hint2">어머니 성함은?</string>
+    <string name="pass_hint3">내가 태어난 곳은?</string>
+    <string name="pass_hint4">나의 보물 1호는?</string>
+    <string name="pass_hint5">결혼 기념일은?</string>
+    <string name="pass_hint6">좋아하는 색깔은?</string>
+    <string name="pass_hint7">어릴적 나의 별명은?</string>
+</resources>

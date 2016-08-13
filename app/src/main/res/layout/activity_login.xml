@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contain_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.youngchae.securecoding.LoginActivity">
+
+    <RelativeLayout
+        android:id="@+id/contain_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/image_main"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/mainlogo" />
+
+        <ImageView
+            android:id="@+id/image_textlogo"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:layout_below="@+id/image_main"
+            android:layout_centerInParent="true"
+            android:src="@drawable/lifeinvader_logo" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/contain_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingTop="200dp"
+        android:visibility="gone">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinput_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="50dp"
+            android:paddingStart="50dp"
+            android:theme="@style/LoginTextInput"
+            app:errorTextAppearance="@style/LoginErrorTextApp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e-mail"
+                android:textColor="@color/white" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinput_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textinput_email"
+            android:paddingEnd="50dp"
+            android:paddingStart="50dp"
+            android:theme="@style/LoginTextInput">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="PassWord"
+                android:inputType="textPassword"
+                android:textColor="@color/white" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textinput_pass"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="90dp"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/red_200"
+            android:text="로그인" />
+
+        <TextView
+            android:id="@+id/text_findpw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_login"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="3dp"
+            android:text="비밀번호를 잊으셨나요?"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/text_reg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_findpw"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
+            android:background="@drawable/textbox"
+            android:gravity="center"
+            android:paddingBottom="9dp"
+            android:paddingTop="9dp"
+            android:text="새 Lifeinvader계정 만들기"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/contain_findpw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingTop="200dp"
+        android:visibility="gone">
+        <LinearLayout
+            android:id="@+id/contin_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <TextView
+                android:id="@+id/text_findpw_desc"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:text="비밀번호 찾기"
+                android:textColor="@color/black"
+                android:gravity="start|left"
+                android:layout_weight="1"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="20dp"/>
+            <TextView
+                android:id="@+id/text_X"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="X"
+                android:textColor="@color/black"
+                android:gravity="end|right"/>
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinput_findpw_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contin_text"
+            android:paddingEnd="50dp"
+            android:paddingStart="50dp"
+            app:theme="@style/FindPwTextInput"
+            app:errorTextAppearance="@style/FindPwErrorTextApp"
+            app:hintTextAppearance="@style/FindPwTextApp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_findpw_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e-mail"
+                android:textColor="@color/black" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/spinner_findpw"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/textinput_findpw_email"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_spinner"
+            android:entries="@array/pass_hint"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinput_findpw_passhint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spinner_findpw"
+            android:paddingEnd="50dp"
+            android:paddingStart="50dp"
+            android:paddingTop="5dp"
+            app:theme="@style/FindPwTextInput"
+            app:errorTextAppearance="@style/FindPwErrorTextApp"
+            app:hintTextAppearance="@style/FindPwTextApp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_findpw_passhint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="PassWordHint"
+                android:textColor="@color/black" />
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:id="@+id/btn_findpw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_below="@id/textinput_findpw_passhint"
+            android:text="확인하기"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:shadowColor="@color/colorPrimaryDark"/>
+    </RelativeLayout>
+</RelativeLayout>

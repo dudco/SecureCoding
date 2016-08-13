@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pass_hint">
+        <item>@string/pass_hint1 </item>
+        <item>@string/pass_hint2</item>
+        <item>@string/pass_hint3</item>
+        <item>@string/pass_hint4</item>
+        <item>@string/pass_hint5</item>
+        <item>@string/pass_hint6</item>
+        <item>@string/pass_hint7</item>
+    </string-array>
+</resources>

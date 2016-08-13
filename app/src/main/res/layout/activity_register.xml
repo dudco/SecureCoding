@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.youngchae.securecoding.RegisterActivity">
+
+    <LinearLayout
+        android:id="@+id/contain_reg_main"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinput_reg_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false"
+            android:theme="@style/RegTextInputStyle">
+            <EditText
+                android:id="@+id/edit_reg_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="사용하실 이메일을 입력하세요."
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinput_reg_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/RegTextInputStyle"
+            app:hintEnabled="false">
+            <EditText
+                android:id="@+id/edit_reg_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="비밀번호를 입력하세요."
+                android:inputType="textPassword"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinput_reg_repass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/RegTextInputStyle"
+            app:hintEnabled="false">
+
+            <EditText
+                android:id="@+id/edit_reg_repass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="비밀번호를 한번 더 입력하세요."
+                android:inputType="textPassword"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinput_reg_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/RegTextInputStyle"
+            app:hintEnabled="false">
+            <EditText
+                android:id="@+id/edit_reg_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="이름(별명)을 입력하세요."
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Spinner
+            android:id="@+id/spinner_reg_passhint"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:entries="@array/pass_hint"
+            android:layout_below="@id/textinput_reg_name"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/shape_spinner">
+        </Spinner>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinput_reg_passhint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:hintEnabled="false"
+            android:theme="@style/RegTextInputStyle">
+            <EditText
+                android:id="@+id/edit_reg_passhint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="PassWordHint"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+</RelativeLayout>
