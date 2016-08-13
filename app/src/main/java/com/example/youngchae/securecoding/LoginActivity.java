@@ -1,10 +1,12 @@
 package com.example.youngchae.securecoding;
 
 import android.animation.Animator;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
@@ -24,6 +26,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.regex.Pattern;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     RelativeLayout contain_main;
@@ -55,7 +61,8 @@ public class LoginActivity extends AppCompatActivity {
     Animation ani;
     Animation show_ani;
 
-    RelativeLayout.LayoutParams layoutParams;
+    AlertDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,8 +116,8 @@ public class LoginActivity extends AppCompatActivity {
         text_FindPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("dudco", text_FindPass.getWidth()/2+"     "+text_FindPass.getHeight()/2);
-                Animator visibleAni = ViewAnimationUtils.createCircularReveal(contain_main, (int) (text_FindPass.getX()+text_FindPass.getWidth()/2), (int) (text_FindPass.getY()+text_FindPass.getHeight()/2), 0, Math.max(contain_main.getWidth(), contain_main.getHeight()));
+                Log.d("dudco", text_FindPass.getWidth() / 2 + "     " + text_FindPass.getHeight() / 2);
+                Animator visibleAni = ViewAnimationUtils.createCircularReveal(contain_main, (int) (text_FindPass.getX() + text_FindPass.getWidth() / 2), (int) (text_FindPass.getY() + text_FindPass.getHeight() / 2), 0, Math.max(contain_main.getWidth(), contain_main.getHeight()));
                 visibleAni.setDuration(500);
                 contain_Edit.setVisibility(View.GONE);
                 contain_findpw.setVisibility(View.VISIBLE);
@@ -124,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
         text_X.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Animator visibleAni = ViewAnimationUtils.createCircularReveal(contain_main, (int) (text_FindPass.getX()+text_FindPass.getWidth()/2), (int) (text_FindPass.getY()+text_FindPass.getHeight()/2), 0, Math.max(contain_main.getWidth(), contain_main.getHeight()));
+                Animator visibleAni = ViewAnimationUtils.createCircularReveal(contain_main, (int) (text_FindPass.getX() + text_FindPass.getWidth() / 2), (int) (text_FindPass.getY() + text_FindPass.getHeight() / 2), 0, Math.max(contain_main.getWidth(), contain_main.getHeight()));
                 visibleAni.setDuration(500);
                 contain_Edit.setVisibility(View.VISIBLE);
                 contain_findpw.setVisibility(View.GONE);
@@ -136,8 +143,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         edit_email.addTextChangedListener(edit_email_textwatcher);
-
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new LoginAsynTask().execute(edit_email.getText().toString(), edit_pass.getText().toString());
+            }
+        });
     }
+
     TextWatcher edit_email_textwatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -146,10 +159,10 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if(!Pattern.matches("^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[\\.][a-zA-Z0-9]+$", charSequence)){
+            if (!Pattern.matches("^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[\\.][a-zA-Z0-9]+$", charSequence)) {
                 textinput_emil.setErrorEnabled(true);
                 textinput_emil.setError("올바른 이메일 형식이 아닙니다.");
-            }else{
+            } else {
                 textinput_emil.setErrorEnabled(false);
             }
         }
@@ -167,10 +180,10 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if(!Pattern.matches("^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[\\.][a-zA-Z0-9]+$", charSequence)){
+            if (!Pattern.matches("^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[\\.][a-zA-Z0-9]+$", charSequence)) {
                 textinput_findpw_email.setErrorEnabled(true);
                 textinput_findpw_email.setError("올바른 이메일 형식이 아닙니다.");
-            }else{
+            } else {
                 textinput_findpw_email.setErrorEnabled(false);
             }
         }
@@ -180,4 +193,51 @@ public class LoginActivity extends AppCompatActivity {
 
         }
     };
+
+    class LoginAsynTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog.Builder(LoginActivity.this)
+                    .setTitle("로그인")
+                    .setMessage("로그인 중입니다...")
+                    .show();
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            Util.retrofit.create(UserService.class).login(strings[0], strings[1]).enqueue(new Callback<UserData>() {
+                @Override
+                public void onResponse(Call<UserData> call, Response<UserData> response) {
+                    dialog.dismiss();
+                    if(response.code() == 200){
+                        new AlertDialog.Builder(LoginActivity.this)
+                                .setTitle("로그인")
+                                .setMessage("로그인 성공")
+                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
+                    }else{
+                        new AlertDialog.Builder(LoginActivity.this)
+                                .setTitle("로그인")
+                                .setMessage("아이디 또는 비밀번호가 일치하지 않습니다.")
+                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserData> call, Throwable t) {
+                    dialog.dismiss();
+                }
+            });
+            return null;
+        }
+    }
 }
