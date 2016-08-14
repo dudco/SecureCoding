@@ -14,6 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.example.youngchae.securecoding.Aes256.Aes256Util;
+import com.example.youngchae.securecoding.Data.UserData;
+import com.example.youngchae.securecoding.Data.UserService;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;

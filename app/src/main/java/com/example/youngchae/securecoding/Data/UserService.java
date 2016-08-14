@@ -1,4 +1,4 @@
-package com.example.youngchae.securecoding;
+package com.example.youngchae.securecoding.Data;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

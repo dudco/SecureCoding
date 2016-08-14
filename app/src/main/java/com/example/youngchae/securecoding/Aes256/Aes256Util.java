@@ -1,4 +1,4 @@
-package com.example.youngchae.securecoding;
+package com.example.youngchae.securecoding.Aes256;
 
 import android.util.Base64;
 

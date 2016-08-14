@@ -1,4 +1,4 @@
-package com.example.youngchae.securecoding;
+package com.example.youngchae.securecoding.Data;
 
 /**
  * Created by youngchae on 2016-08-14.

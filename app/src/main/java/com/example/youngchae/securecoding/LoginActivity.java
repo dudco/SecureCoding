@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +25,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.youngchae.securecoding.Aes256.Aes256Util;
+import com.example.youngchae.securecoding.Data.UserData;
+import com.example.youngchae.securecoding.Data.UserService;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -73,10 +78,14 @@ public class LoginActivity extends AppCompatActivity {
 
     Aes256Util aes;
     String asdf;
+    SharedPreferences session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        session = getSharedPreferences("session", MODE_PRIVATE);
+        if(!session.getString("name","null").equals("null")){
+        }
         try {
             aes = new Aes256Util("a87sda09d08f0a98sd08f00d");
         } catch (UnsupportedEncodingException e) {
@@ -250,6 +259,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<UserData> call, Response<UserData> response) {
                     dialog.dismiss();
                     if(response.code() == 200){
+                        session.edit().putString("name", response.body().getName()).apply();
                         new AlertDialog.Builder(LoginActivity.this)
                                 .setTitle("로그인")
                                 .setMessage("로그인 성공")
