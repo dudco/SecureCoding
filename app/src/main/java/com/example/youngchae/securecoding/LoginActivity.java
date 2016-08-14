@@ -25,7 +25,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,10 +71,17 @@ public class LoginActivity extends AppCompatActivity {
 
     AlertDialog dialog;
 
+    Aes256Util aes;
+    String asdf;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        try {
+            aes = new Aes256Util("a87sda09d08f0a98sd08f00d");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         image_main = (ImageView) findViewById(R.id.image_main);
         image_textlogo = (ImageView) findViewById(R.id.image_textlogo);
@@ -143,10 +158,35 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         edit_email.addTextChangedListener(edit_email_textwatcher);
+
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new LoginAsynTask().execute(edit_email.getText().toString(), edit_pass.getText().toString());
+                try {
+                    asdf = Util.aes.LoginEncPass(edit_pass.getText().toString());
+                    Log.d("dudco",asdf);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (NoSuchPaddingException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (InvalidAlgorithmParameterException e) {
+                    e.printStackTrace();
+                } catch (IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                } catch (BadPaddingException e) {
+                    e.printStackTrace();
+                }
+                new LoginAsynTask().execute(edit_email.getText().toString(), asdf);
+            }
+        });
+        btn_findpw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new FindPWAsynTask().execute(edit_findpw_email.getText().toString(), edit_findpw_passhint.getText().toString());
             }
         });
     }
@@ -233,8 +273,105 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
+                public void onFailure(Call<UserData> call, Throwable t)
+                {
+                    dialog.dismiss();
+                    new AlertDialog.Builder(LoginActivity.this)
+                            .setTitle("결과")
+                            .setMessage("서버 오류")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                }
+            });
+            return null;
+        }
+    }
+    class FindPWAsynTask extends AsyncTask<String, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog.Builder(LoginActivity.this)
+                    .setTitle("비밀번호 찾기")
+                    .setMessage("찾는 중 입니다...")
+                    .show();
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            Util.retrofit.create(UserService.class).findpw(strings[0], strings[1]).enqueue(new Callback<UserData>() {
+                @Override
+                public void onResponse(Call<UserData> call, Response<UserData> response) {
+                    dialog.dismiss();
+
+//                    Log.d("dudco", response.body().getPassword().toString());
+                    if(response.code() == 200){
+                        if(response!=null) {
+                            String string = null;
+                            try {
+                                string = Util.aes.FindpwDecPass(response.body().getPassword());
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchAlgorithmException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchPaddingException e) {
+                                e.printStackTrace();
+                            } catch (InvalidKeyException e) {
+                                e.printStackTrace();
+                            } catch (InvalidAlgorithmParameterException e) {
+                                e.printStackTrace();
+                            } catch (IllegalBlockSizeException e) {
+                                e.printStackTrace();
+                            } catch (BadPaddingException e) {
+                                e.printStackTrace();
+                            }
+                            new AlertDialog.Builder(LoginActivity.this)
+                                    .setTitle("결과")
+                                    .setMessage("당신의 비밀번호는" + string + "입니다.")
+                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    }).show();
+                        }
+                    }else if(response.code() == 401){
+                        new AlertDialog.Builder(LoginActivity.this)
+                                .setTitle("결과")
+                                .setMessage("PassWord Hint를 다시한번 확인해 주세요.")
+                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
+                    }else{
+                        new AlertDialog.Builder(LoginActivity.this)
+                                .setTitle("결과")
+                                .setMessage("ID를 다시한번 확인해 주세요.")
+                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
+                    }
+                }
+
+                @Override
                 public void onFailure(Call<UserData> call, Throwable t) {
                     dialog.dismiss();
+                    new AlertDialog.Builder(LoginActivity.this)
+                            .setTitle("결과")
+                            .setMessage("서버 오류")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
                 }
             });
             return null;
