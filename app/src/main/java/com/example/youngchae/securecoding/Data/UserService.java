@@ -1,5 +1,10 @@
 package com.example.youngchae.securecoding.Data;
 
+import com.example.youngchae.securecoding.BoardActivity;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -27,5 +32,5 @@ public interface UserService {
 
     @FormUrlEncoded
     @POST("/getboard")
-    Call<BoardData> getboard();
+    Call<List<BoardData>> getboard(@Field("aaaa") String aaa);
 }

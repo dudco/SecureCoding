@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.youngchae.securecoding">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,10 +11,22 @@
         android:supportsRtl="true">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/login"></activity>
+            android:theme="@style/login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".RegisterActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".BoardActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".AddBoardActivity"
+            android:label="게시하기"
+            android:theme="@style/Theme.AppCompat.Dialog"></activity>
     </application>
 
 </manifest>
