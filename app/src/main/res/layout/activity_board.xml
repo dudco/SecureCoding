@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#e6e6e6"
-    tools:context=".Board.BoardActivity">
+    tools:context=".Board.BoardActivity"
+    android:id="@+id/linear">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"

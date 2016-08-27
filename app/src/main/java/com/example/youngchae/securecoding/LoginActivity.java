@@ -21,9 +21,11 @@ import android.view.ViewAnimationUtils;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.youngchae.securecoding.Aes256.Aes256Util;
@@ -77,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
 
     AlertDialog dialog;
 
+    Spinner spinner;
+
     Aes256Util aes;
     String asdf;
     SharedPreferences session;
@@ -121,6 +125,12 @@ public class LoginActivity extends AppCompatActivity {
         show_ani = new AlphaAnimation(0, 1);
         show_ani.setDuration(1000);
 
+        spinner = (Spinner) findViewById(R.id.spinner_findpw);
+
+        ArrayAdapter spinnerdapter = ArrayAdapter.createFromResource(LoginActivity.this, R.array.pass_hint,R.layout.text);
+        spinnerdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(spinnerdapter);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -146,9 +156,9 @@ public class LoginActivity extends AppCompatActivity {
                 visibleAni.setDuration(500);
                 contain_Edit.setVisibility(View.GONE);
                 contain_findpw.setVisibility(View.VISIBLE);
-                image_textlogo.setImageResource(R.drawable.lifeinvader_logo_findpw);
-                image_main.setImageResource(R.drawable.mainlog_findpw);
-                contain_main.setBackgroundColor(Color.WHITE);
+//                image_textlogo.setImageResource(R.drawable.lifeinvader_logo_findpw);
+//                image_main.setImageResource(R.drawable.mainlog_findpw);
+                contain_main.setBackgroundColor(getColor(R.color.colorPrimary));
                 edit_findpw_email.addTextChangedListener(findpw_email_textwatcher);
                 visibleAni.start();
             }

@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.youngchae.securecoding.Data.BoardData;
 import com.example.youngchae.securecoding.Data.UserService;
@@ -35,6 +38,7 @@ public class BoardActivity extends AppCompatActivity {
     BoardAdapter adapter;
     ArrayList<BoardList> items = new ArrayList<>();
     String UserName;
+    LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +55,20 @@ public class BoardActivity extends AppCompatActivity {
 
         UserName = getIntent().getStringExtra("UserName");
         Log.d("dudco", UserName);
+
+        linearLayout = (LinearLayout) findViewById(R.id.linear);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1234){
+            new getBoardAsynTask().execute();
+            if(resultCode == RESULT_OK){
+                Snackbar.make(linearLayout,"게시 성공", Snackbar.LENGTH_SHORT).show();
+            }else{
+                Snackbar.make(linearLayout,"실패",Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 
     class getBoardAsynTask extends AsyncTask<Void, Void, Void>{
@@ -70,15 +88,20 @@ public class BoardActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<BoardData>> call, Response<List<BoardData>> response) {
                     if (response.code() == 200) {
+                        items.clear();
+                        boardList.clear();
+
                         Log.d("dudco", response.body().toString());
                         boardList.addAll(response.body());
-                        items.clear();
+
                         for(BoardData board : boardList){
                             SimpleDateFormat sd = new SimpleDateFormat("yyyy년MM월dd일");
                             String date = sd.format(board.getDate());
                             items.add(new BoardList(board.getDesc(), board.getName(), date));
                             Log.d("dudco", board.getDesc());
                         }
+
+                        adapter.notifyDataSetChanged();
                     }
                 }
 
@@ -102,7 +125,7 @@ public class BoardActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.item_add_board){
             Intent intent = new Intent(BoardActivity.this, AddBoardActivity.class);
             intent.putExtra("UserName", UserName);
-            startActivity(intent);
+            startActivityForResult(intent, 1234);
         }
         if(item.getItemId() == R.id.item_reload){
             new getBoardAsynTask().execute();

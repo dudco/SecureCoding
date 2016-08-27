@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -48,7 +49,6 @@ public class AddBoardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("dudco", getIntent().getStringExtra("UserName"));
                 new upBoardAsynTask().execute(getIntent().getStringExtra("UserName"), editText.getText().toString());
-                finish();
             }
         });
         findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
@@ -74,40 +74,18 @@ public class AddBoardActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<BoardData> call, Response<BoardData> response) {
                     if(response.code() == 400){
-                        new AlertDialog.Builder(AddBoardActivity.this)
-                                .setTitle("게시판")
-                                .setMessage("오류발생")
-                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                    }
-                                }).show();
-                    }else{
-                        new AlertDialog.Builder(AddBoardActivity.this)
-                                .setTitle("게시판")
-                                .setMessage("일시 : " + response.body().getDate() + "\n글쓴이 : " + response.body().getName())
-                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                    }
-                                }).show();
+                        setResult(RESULT_CANCELED);
+                        finish();
+                    }else if(response.code() == 200){
+                        setResult(RESULT_OK);
+                        finish();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<BoardData> call, Throwable t) {
-
-                    new AlertDialog.Builder(AddBoardActivity.this)
-                            .setTitle("게시판")
-                            .setMessage("서버 오류")
-                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                }
-                            }).show();
+                    setResult(RESULT_CANCELED);
+                    finish();
                 }
             });
             return null;
