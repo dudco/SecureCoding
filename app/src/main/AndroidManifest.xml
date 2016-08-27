@@ -22,9 +22,9 @@
             android:name=".RegisterActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".BoardActivity"
+            android:name=".Board.BoardActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".AddBoardActivity"
+        <activity android:name=".Board.AddBoardActivity"
             android:label="게시하기"
             android:theme="@style/Theme.AppCompat.Dialog"></activity>
     </application>

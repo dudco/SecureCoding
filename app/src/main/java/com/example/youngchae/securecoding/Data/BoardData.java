@@ -1,14 +1,16 @@
 package com.example.youngchae.securecoding.Data;
 
+import java.util.Date;
+
 /**
  * Created by youngchae on 2016-08-14.
  */
 public class BoardData {
     private String name;
     private String desc;
-    private String date;
+    private Date date;
 
-    public BoardData(String name, String desc, String date) {
+    public BoardData(String name, String desc, Date date) {
         this.name = name;
         this.desc = desc;
         this.date = date;
@@ -22,7 +24,7 @@ public class BoardData {
         return desc;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 }

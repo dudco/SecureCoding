@@ -3,6 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/item_reload"
+        android:title="add"
+        android:icon="@drawable/ic_cached_white_24dp"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/item_add_board"
         android:title="add"
         android:icon="@drawable/ic_note_add_white_24dp"

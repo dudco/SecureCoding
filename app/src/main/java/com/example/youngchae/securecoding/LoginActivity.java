@@ -27,7 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.youngchae.securecoding.Aes256.Aes256Util;
-import com.example.youngchae.securecoding.Data.BoardData;
+import com.example.youngchae.securecoding.Board.BoardActivity;
 import com.example.youngchae.securecoding.Data.UserData;
 import com.example.youngchae.securecoding.Data.UserService;
 
@@ -257,7 +257,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             Util.retrofit.create(UserService.class).login(strings[0], strings[1]).enqueue(new Callback<UserData>() {
                 @Override
-                public void onResponse(Call<UserData> call, Response<UserData> response) {
+                public void onResponse(Call<UserData> call, final Response<UserData> response) {
                     dialog.dismiss();
                     if(response.code() == 200){
                         session.edit().putString("name", response.body().getName()).apply();
@@ -268,7 +268,9 @@ public class LoginActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         dialogInterface.dismiss();
-                                        startActivity(new Intent(LoginActivity.this, BoardActivity.class));
+                                        Intent intent = new Intent(LoginActivity.this, BoardActivity.class);
+                                        intent.putExtra("UserName", response.body().getName());
+                                        startActivity(intent);
                                     }
                                 }).show();
                     }else{

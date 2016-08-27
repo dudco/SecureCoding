@@ -1,8 +1,5 @@
 package com.example.youngchae.securecoding.Data;
 
-import com.example.youngchae.securecoding.BoardActivity;
-import com.google.gson.reflect.TypeToken;
-
 import java.util.List;
 
 import retrofit2.Call;

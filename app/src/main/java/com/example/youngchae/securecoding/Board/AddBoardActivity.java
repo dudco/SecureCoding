@@ -1,61 +1,67 @@
-package com.example.youngchae.securecoding;
+package com.example.youngchae.securecoding.Board;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.example.youngchae.securecoding.Data.BoardData;
 import com.example.youngchae.securecoding.Data.UserService;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.youngchae.securecoding.R;
+import com.example.youngchae.securecoding.Util;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BoardActivity extends AppCompatActivity {
+public class AddBoardActivity extends AppCompatActivity {
     Dialog dialog;
     EditText editText;
-    ArrayList<BoardData> boardList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_board);
+        View view = LayoutInflater.from(this).inflate(R.layout.activity_add_board, null);
 
-//        editText = (EditText) findViewById(R.id.edit_board);
+        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        Log.d("dudco", width + "   " + height);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int)((float)width/1.5), (int)((float)width/3.3));
+        view.setLayoutParams(params);
 
-//        findViewById(R.id.btn_getboard).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new getBoardAsynTask().execute();
-//            }
-//        });
-//
-//        findViewById(R.id.btn_upboard).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new upBoardAsynTask().execute("dudco",editText.getText().toString());
-//            }
-//        });
+        setContentView(view);
+
+        editText = (EditText) findViewById(R.id.edit_add_board);
+        findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("dudco", getIntent().getStringExtra("UserName"));
+                new upBoardAsynTask().execute(getIntent().getStringExtra("UserName"), editText.getText().toString());
+                finish();
+            }
+        });
+        findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
-
-    class upBoardAsynTask extends AsyncTask<String, Void, Void>{
+    class upBoardAsynTask extends AsyncTask<String, Void, Void> {
         @Override
         protected void onPreExecute() {
-            dialog = new ProgressDialog.Builder(BoardActivity.this)
+            dialog = new ProgressDialog.Builder(AddBoardActivity.this)
                     .setTitle("업로드")
                     .setMessage("업로드 중입니다...")
                     .show();
@@ -68,7 +74,7 @@ public class BoardActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<BoardData> call, Response<BoardData> response) {
                     if(response.code() == 400){
-                        new AlertDialog.Builder(BoardActivity.this)
+                        new AlertDialog.Builder(AddBoardActivity.this)
                                 .setTitle("게시판")
                                 .setMessage("오류발생")
                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -78,7 +84,7 @@ public class BoardActivity extends AppCompatActivity {
                                     }
                                 }).show();
                     }else{
-                        new AlertDialog.Builder(BoardActivity.this)
+                        new AlertDialog.Builder(AddBoardActivity.this)
                                 .setTitle("게시판")
                                 .setMessage("일시 : " + response.body().getDate() + "\n글쓴이 : " + response.body().getName())
                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -93,7 +99,7 @@ public class BoardActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<BoardData> call, Throwable t) {
 
-                    new AlertDialog.Builder(BoardActivity.this)
+                    new AlertDialog.Builder(AddBoardActivity.this)
                             .setTitle("게시판")
                             .setMessage("서버 오류")
                             .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -106,58 +112,5 @@ public class BoardActivity extends AppCompatActivity {
             });
             return null;
         }
-    }
-    class getBoardAsynTask extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected void onPreExecute() {
-            dialog = new ProgressDialog.Builder(BoardActivity.this)
-                    .setTitle("로딩")
-                    .setMessage("로딩 중입니다...")
-                    .show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (dialog.isShowing())
-                dialog.dismiss();
-            Util.retrofit.create(UserService.class).getboard("aaa").enqueue(new Callback<List<BoardData>>() {
-                @Override
-                public void onResponse(Call<List<BoardData>> call, Response<List<BoardData>> response) {
-                    if (response.code() == 200) {
-                        Log.d("dudco", response.body().toString());
-                        boardList = (ArrayList<BoardData>) response.body();
-                        for(BoardData board : boardList){
-                            Log.d("dudco", board.getDesc());
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<BoardData>> call, Throwable t) {
-
-                }
-            });
-            return null;
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.board_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.item_add_board){
-            startActivity(new Intent(BoardActivity.this, AddBoardActivity.class));
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        new getBoardAsynTask().execute();
     }
 }
