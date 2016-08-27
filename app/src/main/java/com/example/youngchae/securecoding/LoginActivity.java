@@ -84,12 +84,13 @@ public class LoginActivity extends AppCompatActivity {
     Aes256Util aes;
     String asdf;
     SharedPreferences session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         session = getSharedPreferences("session", MODE_PRIVATE);
-        if(!session.getString("name","null").equals("null")){
+        if (!session.getString("name", "null").equals("null")) {
         }
         try {
             aes = new Aes256Util("a87sda09d08f0a98sd08f00d");
@@ -127,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
 
         spinner = (Spinner) findViewById(R.id.spinner_findpw);
 
-        ArrayAdapter spinnerdapter = ArrayAdapter.createFromResource(LoginActivity.this, R.array.pass_hint,R.layout.text);
+        ArrayAdapter spinnerdapter = ArrayAdapter.createFromResource(LoginActivity.this, R.array.pass_hint, R.layout.text);
         spinnerdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(spinnerdapter);
@@ -184,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     asdf = Util.aes.LoginEncPass(edit_pass.getText().toString());
-                    Log.d("dudco",asdf);
+                    Log.d("dudco", asdf);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 } catch (NoSuchAlgorithmException e) {
@@ -269,22 +270,24 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<UserData> call, final Response<UserData> response) {
                     dialog.dismiss();
-                    if(response.code() == 200){
+                    if (response.code() == 200) {
                         session.edit().putString("name", response.body().getName()).apply();
+//                        new AlertDialog.Builder(LoginActivity.this)
+//                                .setTitle("로그인")
+//                                .setMessage("로그인 성공")
+//                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialogInterface, int i) {
+//                                        dialogInterface.dismiss();
+//                                    }
+//                                }).show();
+
+                        Intent intent = new Intent(LoginActivity.this, BoardActivity.class);
+                        intent.putExtra("UserName", response.body().getName());
+                        startActivity(intent);
+                    } else {
                         new AlertDialog.Builder(LoginActivity.this)
-                                .setTitle("로그인")
-                                .setMessage("로그인 성공")
-                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                        Intent intent = new Intent(LoginActivity.this, BoardActivity.class);
-                                        intent.putExtra("UserName", response.body().getName());
-                                        startActivity(intent);
-                                    }
-                                }).show();
-                    }else{
-                        new AlertDialog.Builder(LoginActivity.this)
+
                                 .setTitle("로그인")
                                 .setMessage("아이디 또는 비밀번호가 일치하지 않습니다.")
                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -297,8 +300,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<UserData> call, Throwable t)
-                {
+                public void onFailure(Call<UserData> call, Throwable t) {
                     dialog.dismiss();
                     new AlertDialog.Builder(LoginActivity.this)
                             .setTitle("결과")
@@ -314,7 +316,8 @@ public class LoginActivity extends AppCompatActivity {
             return null;
         }
     }
-    class FindPWAsynTask extends AsyncTask<String, Void, Void>{
+
+    class FindPWAsynTask extends AsyncTask<String, Void, Void> {
         @Override
         protected void onPreExecute() {
             dialog = new ProgressDialog.Builder(LoginActivity.this)
@@ -331,8 +334,8 @@ public class LoginActivity extends AppCompatActivity {
                     dialog.dismiss();
 
 //                    Log.d("dudco", response.body().getPassword().toString());
-                    if(response.code() == 200){
-                        if(response!=null) {
+                    if (response.code() == 200) {
+                        if (response != null) {
                             String string = null;
                             try {
                                 string = Util.aes.FindpwDecPass(response.body().getPassword());
@@ -361,7 +364,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     }).show();
                         }
-                    }else if(response.code() == 401){
+                    } else if (response.code() == 401) {
                         new AlertDialog.Builder(LoginActivity.this)
                                 .setTitle("결과")
                                 .setMessage("PassWord Hint를 다시한번 확인해 주세요.")
@@ -371,7 +374,7 @@ public class LoginActivity extends AppCompatActivity {
                                         dialogInterface.dismiss();
                                     }
                                 }).show();
-                    }else{
+                    } else {
                         new AlertDialog.Builder(LoginActivity.this)
                                 .setTitle("결과")
                                 .setMessage("ID를 다시한번 확인해 주세요.")
