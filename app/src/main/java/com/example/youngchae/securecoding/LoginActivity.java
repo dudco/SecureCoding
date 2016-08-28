@@ -210,7 +210,17 @@ public class LoginActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                 }
                             }).show();
-                } else {
+                }else if(edit_email.getText().toString().contains("$") || edit_pass.getText().toString().contains("$")){
+                    new AlertDialog.Builder(LoginActivity.this)
+                            .setTitle("로그인 오류")
+                            .setMessage("Error")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                }else {
                     String pass_Enc = "";
                     String email_Enc = "";
                     try {
