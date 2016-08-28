@@ -82,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
     Spinner spinner;
 
     Aes256Util aes;
-    String asdf;
     SharedPreferences session;
 
     @Override
@@ -153,28 +152,36 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("dudco", text_FindPass.getWidth() / 2 + "     " + text_FindPass.getHeight() / 2);
-                Animator visibleAni = ViewAnimationUtils.createCircularReveal(contain_main, (int) (text_FindPass.getX() + text_FindPass.getWidth() / 2), (int) (text_FindPass.getY() + text_FindPass.getHeight() / 2), 0, Math.max(contain_main.getWidth(), contain_main.getHeight()));
+                Animator visibleAni = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    visibleAni = ViewAnimationUtils.createCircularReveal(contain_main, (int) (text_FindPass.getX() + text_FindPass.getWidth() / 2), (int) (text_FindPass.getY() + text_FindPass.getHeight() / 2), 0, Math.max(contain_main.getWidth(), contain_main.getHeight()));
+                }
                 visibleAni.setDuration(500);
                 contain_Edit.setVisibility(View.GONE);
                 contain_findpw.setVisibility(View.VISIBLE);
 //                image_textlogo.setImageResource(R.drawable.lifeinvader_logo_findpw);
 //                image_main.setImageResource(R.drawable.mainlog_findpw);
-                contain_main.setBackgroundColor(getColor(R.color.colorPrimary));
+                contain_main.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 edit_findpw_email.addTextChangedListener(findpw_email_textwatcher);
-                visibleAni.start();
+                if (visibleAni != null)
+                    visibleAni.start();
             }
         });
         text_X.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Animator visibleAni = ViewAnimationUtils.createCircularReveal(contain_main, (int) (text_FindPass.getX() + text_FindPass.getWidth() / 2), (int) (text_FindPass.getY() + text_FindPass.getHeight() / 2), 0, Math.max(contain_main.getWidth(), contain_main.getHeight()));
+                Animator visibleAni = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    visibleAni = ViewAnimationUtils.createCircularReveal(contain_main, (int) (text_FindPass.getX() + text_FindPass.getWidth() / 2), (int) (text_FindPass.getY() + text_FindPass.getHeight() / 2), 0, Math.max(contain_main.getWidth(), contain_main.getHeight()));
+                }
                 visibleAni.setDuration(500);
                 contain_Edit.setVisibility(View.VISIBLE);
                 contain_findpw.setVisibility(View.GONE);
                 image_textlogo.setImageResource(R.drawable.lifeinvader_logo);
                 image_main.setImageResource(R.drawable.mainlogo);
                 contain_main.setBackgroundColor(Color.parseColor("#00000000"));
-                visibleAni.start();
+                if (visibleAni != null)
+                    visibleAni.start();
             }
         });
 
@@ -183,31 +190,54 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    asdf = Util.aes.LoginEncPass(edit_pass.getText().toString());
-                    Log.d("dudco", asdf);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                } catch (InvalidAlgorithmParameterException e) {
-                    e.printStackTrace();
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                } catch (BadPaddingException e) {
-                    e.printStackTrace();
+                if (edit_email.getText().equals("") && edit_pass.getText().equals("")) {
+                    new AlertDialog.Builder(LoginActivity.this)
+                            .setTitle("로그인 오류")
+                            .setMessage("공란입력은 불가능 합니다")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                } else if (!Pattern.matches("^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[\\.][a-zA-Z0-9]+$", edit_email.getText())) {
+                    new AlertDialog.Builder(LoginActivity.this)
+                            .setTitle("로그인 오류")
+                            .setMessage("이메일 형식이 아닙니다")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                } else {
+                    String pass_Enc = "";
+                    String email_Enc = "";
+                    try {
+                        pass_Enc = Util.aes.LoginEncPass(edit_pass.getText().toString());
+                        email_Enc = Util.aes.LoginEncPass(edit_email.getText().toString());
+                    } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |
+                            InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
+                        e.printStackTrace();
+                    }
+
+                    new LoginAsynTask().execute(email_Enc, pass_Enc);
                 }
-                new LoginAsynTask().execute(edit_email.getText().toString(), asdf);
             }
         });
         btn_findpw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FindPWAsynTask().execute(edit_findpw_email.getText().toString(), edit_findpw_passhint.getText().toString());
+                String findpw_email_Enc = "";
+                String findpw_passhint_Enc = "";
+                try {
+                    findpw_email_Enc = Util.aes.LoginEncPass(edit_findpw_email.getText().toString());
+                    findpw_passhint_Enc = Util.aes.LoginEncPass(edit_findpw_passhint.getText().toString());
+                } catch (NoSuchPaddingException | InvalidAlgorithmParameterException | UnsupportedEncodingException | IllegalBlockSizeException |
+                        BadPaddingException | NoSuchAlgorithmException | InvalidKeyException e) {
+                    e.printStackTrace();
+                }
+                new FindPWAsynTask().execute(findpw_email_Enc, findpw_passhint_Enc);
             }
         });
     }
@@ -271,19 +301,26 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<UserData> call, final Response<UserData> response) {
                     dialog.dismiss();
                     if (response.code() == 200) {
-                        session.edit().putString("name", response.body().getName()).apply();
-//                        new AlertDialog.Builder(LoginActivity.this)
-//                                .setTitle("로그인")
-//                                .setMessage("로그인 성공")
-//                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialogInterface, int i) {
-//                                        dialogInterface.dismiss();
-//                                    }
-//                                }).show();
-
+                        String name_dec = "";
+                        try {
+                            name_dec = Util.aes.FindpwDecPass(response.body().getName());
+                        } catch (NoSuchPaddingException e) {
+                            e.printStackTrace();
+                        } catch (InvalidAlgorithmParameterException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        } catch (IllegalBlockSizeException e) {
+                            e.printStackTrace();
+                        } catch (BadPaddingException e) {
+                            e.printStackTrace();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (InvalidKeyException e) {
+                            e.printStackTrace();
+                        }
                         Intent intent = new Intent(LoginActivity.this, BoardActivity.class);
-                        intent.putExtra("UserName", response.body().getName());
+                        intent.putExtra("UserName", name_dec);
                         startActivity(intent);
                     } else {
                         new AlertDialog.Builder(LoginActivity.this)
@@ -336,9 +373,9 @@ public class LoginActivity extends AppCompatActivity {
 //                    Log.d("dudco", response.body().getPassword().toString());
                     if (response.code() == 200) {
                         if (response != null) {
-                            String string = null;
+                            String pass = null;
                             try {
-                                string = Util.aes.FindpwDecPass(response.body().getPassword());
+                                pass = Util.aes.FindpwDecPass(response.body().getPassword());
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             } catch (NoSuchAlgorithmException e) {
@@ -356,7 +393,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             new AlertDialog.Builder(LoginActivity.this)
                                     .setTitle("결과")
-                                    .setMessage("당신의 비밀번호는" + string + "입니다.")
+                                    .setMessage("당신의 비밀번호는" + pass + "입니다.")
                                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {

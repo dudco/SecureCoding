@@ -46,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText edit_reg_passhint;
     Aes256Util aes;
     Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,29 +87,47 @@ public class RegisterActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home : finish(); break;
             case R.id.done :
-                String asdf = "";
-                try {
-                asdf = Util.aes.RegEncPass(edit_reg_pass.getText().toString());
-            } catch (NoSuchPaddingException e) {
-                e.printStackTrace();
-            } catch (InvalidAlgorithmParameterException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (IllegalBlockSizeException e) {
-                e.printStackTrace();
-            } catch (BadPaddingException e) {
-                e.printStackTrace();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (InvalidKeyException e) {
-                e.printStackTrace();
-            }
-                new RegAsynTask().execute(
-                            edit_reg_email.getText().toString(),
-                            asdf ,
-                            edit_reg_name.getText().toString(),
-                            "1", edit_reg_passhint.getText().toString());
+                String email_Enc = "";
+                String pass_Enc = "";
+                String name_Enc = "";
+                String passhint_Enc = "";
+                if(edit_reg_pass.getText().toString().matches("[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힝]*")){
+                    new AlertDialog.Builder(RegisterActivity.this)
+                            .setTitle("회원가입 오류")
+                            .setMessage("비밀번호에는 반드시 특수문자가 포함되어야 합니다.")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                }else if(!Pattern.matches("^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[\\.][a-zA-Z0-9]+$", edit_reg_email.getText())){
+                    new AlertDialog.Builder(RegisterActivity.this)
+                            .setTitle("회원가입 오류")
+                            .setMessage("이메일 형식이 올바르지 않습니다.")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                }else{
+
+                    try {
+                        pass_Enc = Util.aes.RegEncPass(edit_reg_pass.getText().toString());
+                        email_Enc = Util.aes.RegEncPass(edit_reg_email.getText().toString());
+                        passhint_Enc = Util.aes.RegEncPass(edit_reg_passhint.getText().toString());
+                        name_Enc = Util.aes.RegEncPass(edit_reg_name.getText().toString());
+                    } catch (NoSuchPaddingException | InvalidAlgorithmParameterException | UnsupportedEncodingException | IllegalBlockSizeException |
+                            BadPaddingException | NoSuchAlgorithmException | InvalidKeyException e) {
+                        e.printStackTrace();
+                    }
+                    new RegAsynTask().execute(
+                            email_Enc,
+                            pass_Enc ,
+                            name_Enc,
+                            "1", passhint_Enc);
+                }
 
                 break;
         }
@@ -144,11 +163,18 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if(charSequence.length() < 10){
+
+            if(charSequence.length() < 9){
                 textinput_reg_pass.setErrorEnabled(true);
-                textinput_reg_pass.setError("PassWord는 10자 이상이여야 합니다.");
+                textinput_reg_pass.setError("PassWord는 9자 이상이여야 합니다.");
             }else{
-                textinput_reg_pass.setErrorEnabled(false);
+                if(charSequence.toString().matches("[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힝]*")){
+
+                    textinput_reg_pass.setErrorEnabled(true);
+                    textinput_reg_pass.setError("PassWord에는 특수문자가 1개이상 존재해야 합니다.");
+                }else{
+                    textinput_reg_pass.setErrorEnabled(false);
+                }
             }
         }
 
@@ -206,9 +232,27 @@ public class RegisterActivity extends AppCompatActivity {
                                     }
                                 }).show();
                     }else if(response.code() == 200){
+                        String name_dec = "";
+                        try {
+                            name_dec = Util.aes.FindpwDecPass(response.body().getName());
+                        } catch (NoSuchPaddingException e) {
+                            e.printStackTrace();
+                        } catch (InvalidAlgorithmParameterException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        } catch (IllegalBlockSizeException e) {
+                            e.printStackTrace();
+                        } catch (BadPaddingException e) {
+                            e.printStackTrace();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (InvalidKeyException e) {
+                            e.printStackTrace();
+                        }
                         new AlertDialog.Builder(RegisterActivity.this)
                                 .setTitle("결과")
-                                .setMessage("환영합니다 "+response.body().getName()+"님")
+                                .setMessage("환영합니다 "+name_dec+"님")
                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
