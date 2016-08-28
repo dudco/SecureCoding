@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (edit_email.getText().equals("") && edit_pass.getText().equals("")) {
+                if (edit_email.getText().equals("") || edit_pass.getText().equals("")) {
                     new AlertDialog.Builder(LoginActivity.this)
                             .setTitle("로그인 오류")
                             .setMessage("공란입력은 불가능 합니다")
