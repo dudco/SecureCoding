@@ -17,14 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:hintEnabled="false"
-            android:theme="@style/RegTextInputStyle">
+            android:theme="@style/RegTextInputStyle"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp">
             <EditText
                 android:id="@+id/edit_reg_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="사용하실 이메일을 입력하세요."
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -32,6 +32,8 @@
             android:id="@+id/textinput_reg_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:theme="@style/RegTextInputStyle"
             app:hintEnabled="false">
             <EditText
@@ -40,8 +42,6 @@
                 android:layout_height="wrap_content"
                 android:hint="비밀번호를 입력하세요."
                 android:inputType="textPassword"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -50,6 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/RegTextInputStyle"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             app:hintEnabled="false">
 
             <EditText
@@ -58,8 +60,6 @@
                 android:layout_height="wrap_content"
                 android:hint="비밀번호를 한번 더 입력하세요."
                 android:inputType="textPassword"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 />
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
@@ -67,14 +67,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/RegTextInputStyle"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             app:hintEnabled="false">
             <EditText
                 android:id="@+id/edit_reg_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="이름(별명)을 입력하세요."
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -95,6 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             app:hintEnabled="false"
             android:theme="@style/RegTextInputStyle">
             <EditText
@@ -102,8 +104,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="PassWordHint"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>

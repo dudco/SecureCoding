@@ -30,4 +30,8 @@ public interface UserService {
     @FormUrlEncoded
     @POST("/getboard")
     Call<List<BoardData>> getboard(@Field("aaaa") String aaa);
+
+    @FormUrlEncoded
+    @POST("/getuserdata")
+    Call<UserData> getUserData(@Field("name")String name);
 }

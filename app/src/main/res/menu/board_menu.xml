@@ -4,12 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/item_reload"
-        android:title="add"
-        android:icon="@drawable/ic_cached_white_24dp"
-        app:showAsAction="ifRoom"/>
+        android:title="새로고침"/>
     <item
         android:id="@+id/item_add_board"
-        android:title="add"
-        android:icon="@drawable/ic_note_add_white_24dp"
-        app:showAsAction="ifRoom"/>
+        android:title="글쓰기"/>
+
+    <item
+        android:id="@+id/item_login_info"
+        android:title="로그인 정보"/>
 </menu>

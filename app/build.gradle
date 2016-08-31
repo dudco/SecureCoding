@@ -12,6 +12,10 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -26,4 +30,6 @@ dependencies {
     compile 'com.android.support:design:24.1.1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.googlecode.android-query:android-query:0.25.9'
 }

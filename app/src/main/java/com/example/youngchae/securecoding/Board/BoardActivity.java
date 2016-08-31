@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 
 import com.example.youngchae.securecoding.Data.BoardData;
 import com.example.youngchae.securecoding.Data.UserService;
+import com.example.youngchae.securecoding.LoginInfoActivity;
 import com.example.youngchae.securecoding.R;
 import com.example.youngchae.securecoding.Util;
 
@@ -71,6 +72,32 @@ public class BoardActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.board_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.item_add_board){
+            Intent intent = new Intent(BoardActivity.this, AddBoardActivity.class);
+            intent.putExtra("UserName", UserName);
+            startActivityForResult(intent, 1234);
+        }
+        if(item.getItemId() == R.id.item_reload){
+            new getBoardAsynTask().execute();
+            Log.d("dudco", items.size()+"");
+            adapter.notifyDataSetChanged();
+        }
+        if(item.getItemId() == R.id.item_login_info){
+            Intent intent = new Intent(BoardActivity.this, LoginInfoActivity.class);
+            intent.putExtra("UserName", UserName);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
     class getBoardAsynTask extends AsyncTask<Void, Void, Void>{
         @Override
         protected void onPreExecute() {
@@ -114,26 +141,6 @@ public class BoardActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.board_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.item_add_board){
-            Intent intent = new Intent(BoardActivity.this, AddBoardActivity.class);
-            intent.putExtra("UserName", UserName);
-            startActivityForResult(intent, 1234);
-        }
-        if(item.getItemId() == R.id.item_reload){
-            new getBoardAsynTask().execute();
-            Log.d("dudco", items.size()+"");
-            adapter.notifyDataSetChanged();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onStart() {

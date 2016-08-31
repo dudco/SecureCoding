@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="20dp">
+        <RadioButton
+            android:id="@+id/dialog_rb_camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="카메라"
+            android:textSize="20sp"
+            android:layout_margin="6dp"/>
+        <RadioButton
+            android:id="@+id/dialog_rb_album"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="앨범"
+            android:textSize="20sp"
+            android:layout_margin="6dp"/>
+    </RadioGroup>
+</LinearLayout>
